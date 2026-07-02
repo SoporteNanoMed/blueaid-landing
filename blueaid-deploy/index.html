@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BlueAid — El sistema operativo del riesgo humano</title>
+<meta name="description" content="BlueAid es el sistema operativo de inteligencia del riesgo humano para industrias de alto riesgo. Monitoreo, predicción y prevención en tiempo real para minería, construcción, energía y operaciones industriales pesadas."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:#03050b;
+  --bg-2:#070a14;
+  --bg-3:#0c101c;
+  --line:rgba(255,255,255,.05);
+  --line-2:rgba(255,255,255,.10);
+  --line-3:rgba(255,255,255,.18);
+  --text:#f2f5fa;
+  --text-2:#c9d1de;
+  --text-dim:#7d8798;
+  --text-mute:#465064;
+  --cyan:#00d1ff;
+  --cyan-dim:#0891b2;
+  --blue:#2f6bff;
+  --blue-2:#3b82f6;
+  --purple:#8b5cf6;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sans:'Inter',-apple-system,sans-serif;
+}
+
+html,body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  scroll-behavior:smooth;
+}
+::selection{background:var(--cyan);color:var(--bg);}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+
+.bg-grad{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 1600px 900px at 50% -5%, rgba(0,209,255,.09), transparent 60%),
+    radial-gradient(ellipse 1200px 800px at 100% 25%, rgba(47,107,255,.07), transparent 60%),
+    radial-gradient(ellipse 900px 700px at 0% 55%, rgba(139,92,246,.04), transparent 60%),
+    radial-gradient(ellipse 1200px 800px at 50% 100%, rgba(0,209,255,.05), transparent 60%);
+}
+.bg-grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size:64px 64px;
+}
+.bg-noise{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  padding:18px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  background:rgba(3,5,11,.6);
+  border-bottom:1px solid var(--line);
+}
+.nav-brand{display:flex;align-items:center;gap:14px;}
+.nav-logo{
+  width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line-2);border-radius:9px;
+  background:linear-gradient(135deg,rgba(0,209,255,.14),rgba(47,107,255,.05));
+}
+.nav-brand-text{display:flex;align-items:baseline;gap:10px;}
+.nav-brand-name{font-size:16px;font-weight:700;letter-spacing:-.3px;color:var(--text);}
+.nav-brand-tag{
+  font-family:var(--mono);font-size:9.5px;color:var(--cyan);
+  letter-spacing:1.8px;text-transform:uppercase;font-weight:500;
+  padding:3px 8px;border-radius:4px;
+  background:rgba(0,209,255,.08);border:1px solid rgba(0,209,255,.22);
+}
+.nav-links{display:flex;gap:32px;}
+.nav-links a{
+  font-family:var(--sans);font-size:13px;color:var(--text-dim);
+  font-weight:500;transition:color .15s;
+}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{
+  font-size:13px;font-weight:600;
+  padding:10px 18px;border-radius:8px;
+  background:var(--text);color:var(--bg);
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .15s;
+}
+.nav-cta:hover{background:var(--cyan);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,209,255,.3);}
+
+/* HERO */
+.hero{
+  min-height:100vh;padding:180px 32px 60px 32px;
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.hero-inner{max-width:1400px;margin:0 auto;width:100%;}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  margin-bottom:44px;font-family:var(--mono);font-size:11px;
+  color:var(--text-dim);letter-spacing:2px;font-weight:500;
+  text-transform:uppercase;
+}
+.hero-eyebrow-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 10px var(--cyan);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.hero-eyebrow-sep{color:var(--text-mute);}
+
+.hero h1{
+  font-size:clamp(44px,8.4vw,128px);
+  font-weight:500;
+  letter-spacing:-.05em;
+  line-height:.92;
+  color:var(--text);
+  max-width:1400px;
+  margin-bottom:48px;
+}
+.hero h1 .light{
+  font-weight:300;color:var(--text-2);
+}
+.hero h1 .em{
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-style:italic;font-weight:400;
+}
+
+.hero-sub{
+  font-size:clamp(16px,1.6vw,20px);
+  color:var(--text-dim);max-width:660px;
+  line-height:1.55;font-weight:400;
+  margin-bottom:56px;
+}
+.hero-sub strong{color:var(--text-2);font-weight:500;}
+
+.hero-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 26px;border-radius:10px;
+  background:var(--text);color:var(--bg);
+  font-size:14px;font-weight:600;
+  border:1px solid var(--text);
+  transition:all .2s;
+  position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  opacity:0;transition:opacity .2s;
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 16px 40px rgba(0,209,255,.28);}
+.btn-primary:hover::before{opacity:1;}
+.btn-primary > *{position:relative;z-index:1;}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:15px 22px;border-radius:10px;
+  background:transparent;color:var(--text);
+  font-size:14px;font-weight:500;
+  border:1px solid var(--line-2);
+  transition:all .2s;
+}
+.btn-ghost:hover{border-color:var(--text-dim);background:rgba(255,255,255,.02);}
+
+/* COMMAND CENTER */
+.cmd{padding:0 32px 80px;position:relative;z-index:2;}
+.cmd-inner{max-width:1400px;margin:0 auto;}
+.cmd-frame{
+  border-radius:16px;border:1px solid var(--line-2);
+  background:linear-gradient(180deg,rgba(12,16,28,.92),rgba(7,10,20,.98));
+  box-shadow:
+    0 60px 160px rgba(0,0,0,.6),
+    0 0 0 1px rgba(0,209,255,.06),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  overflow:hidden;
+}
+.cmd-topbar{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 20px;border-bottom:1px solid var(--line);
+  background:rgba(0,0,0,.35);
+}
+.cmd-dots{display:flex;gap:6px;}
+.cmd-dots span{width:11px;height:11px;border-radius:50%;background:var(--line-2);}
+.cmd-title{font-family:var(--mono);font-size:11px;color:var(--text-mute);letter-spacing:.6px;}
+.cmd-title b{color:var(--text-2);font-weight:500;}
+.cmd-live{
+  margin-left:auto;
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:10px;color:var(--green);
+  text-transform:uppercase;letter-spacing:1px;font-weight:600;
+}
+.cmd-live::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 8px var(--green);animation:pulse 1.5s infinite;
+}
+
+.cmd-body{display:grid;grid-template-columns:220px 1fr 260px;min-height:520px;}
+.cmd-side{border-right:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:6px;}
+.cmd-side-label{
+  font-family:var(--mono);font-size:9px;color:var(--text-mute);
+  letter-spacing:1.5px;text-transform:uppercase;font-weight:600;
+  padding:8px 10px 4px;
+}
+.cmd-side-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:6px;
+  font-size:12px;color:var(--text-dim);font-weight:500;
+  transition:background .15s, color .15s;
+}
+.cmd-side-item:hover{background:rgba(255,255,255,.03);color:var(--text-2);}
+.cmd-side-item.active{
+  background:rgba(0,209,255,.08);color:var(--text);
+  border:1px solid rgba(0,209,255,.15);
+}
+.cmd-side-icon{width:14px;height:14px;flex-shrink:0;opacity:.8;}
+.cmd-side-count{
+  margin-left:auto;font-family:var(--mono);font-size:10px;
+  color:var(--text-mute);font-weight:600;
+}
+.cmd-side-item.active .cmd-side-count{color:var(--cyan);}
+.cmd-side-count.alert{color:var(--red);}
+
+.cmd-main{
+  padding:24px;position:relative;
+  background:radial-gradient(ellipse 800px 500px at 50% 50%, rgba(0,209,255,.05), transparent 60%);
+}
+.cmd-main-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.cmd-main-title{font-size:13px;font-weight:600;color:var(--text);}
+.cmd-main-sub{font-family:var(--mono);font-size:10px;color:var(--text-mute);letter-spacing:.5px;}
+.cmd-main-tabs{display:flex;gap:4px;}
+.cmd-tab{
+  font-family:var(--mono);font-size:10px;color:var(--text-mute);
+  padding:5px 10px;border-radius:5px;letter-spacing:.5px;text-transform:uppercase;
+}
+.cmd-tab.active{color:var(--text);background:rgba(255,255,255,.06);}
+
+.cmd-map{
+  position:relative;width:100%;height:380px;
+  border:1px solid var(--line);border-radius:10px;
+  background:
+    radial-gradient(circle at 30% 60%, rgba(0,209,255,.06), transparent 40%),
+    radial-gradient(circle at 70% 30%, rgba(47,107,255,.05), transparent 40%),
+    linear-gradient(180deg, rgba(7,10,20,.5), rgba(0,0,0,.6));
+  overflow:hidden;
+}
+.cmd-map-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size:24px 24px;
+}
+.cmd-dot{position:absolute;width:8px;height:8px;border-radius:50%;transform:translate(-50%,-50%);}
+.cmd-dot.ok{background:var(--green);box-shadow:0 0 8px rgba(34,197,94,.5);}
+.cmd-dot.warn{background:var(--amber);box-shadow:0 0 10px rgba(245,158,11,.6);}
+.cmd-dot.alert{
+  background:var(--red);box-shadow:0 0 14px rgba(239,68,68,.8);
+  animation:alertPulse 1.5s ease-in-out infinite;
+}
+@keyframes alertPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 14px rgba(239,68,68,.8);}
+  50%{transform:translate(-50%,-50%) scale(1.35);box-shadow:0 0 22px rgba(239,68,68,1);}
+}
+.cmd-ring{
+  position:absolute;width:32px;height:32px;border-radius:50%;
+  border:1.5px solid rgba(239,68,68,.6);transform:translate(-50%,-50%);
+  animation:ringPulse 2s ease-out infinite;
+}
+@keyframes ringPulse{
+  0%{transform:translate(-50%,-50%) scale(.3);opacity:1;}
+  100%{transform:translate(-50%,-50%) scale(2.5);opacity:0;}
+}
+
+.cmd-feed{border-left:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:8px;font-family:var(--mono);}
+.cmd-feed-label{
+  font-size:9px;color:var(--text-mute);letter-spacing:1.5px;
+  text-transform:uppercase;font-weight:600;margin-bottom:6px;padding:0 4px;
+}
+.cmd-feed-item{
+  padding:10px 12px;border-radius:7px;
+  background:rgba(255,255,255,.02);border:1px solid var(--line);
+  display:flex;flex-direction:column;gap:4px;
+}
+.cmd-feed-item.hot{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.05);}
+.cmd-feed-head{display:flex;align-items:center;gap:6px;}
+.cmd-feed-tag{
+  font-size:8.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:2px 5px;border-radius:3px;
+}
+.cmd-feed-tag.alert{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
+.cmd-feed-tag.warn{background:rgba(245,158,11,.15);color:#fcd34d;border:1px solid rgba(245,158,11,.25);}
+.cmd-feed-tag.ok{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.25);}
+.cmd-feed-time{margin-left:auto;font-size:9px;color:var(--text-mute);}
+.cmd-feed-text{font-size:11px;color:var(--text-2);line-height:1.4;}
+.cmd-feed-text .h{color:var(--text);font-weight:500;}
+.cmd-feed-meta{font-size:9.5px;color:var(--text-mute);}
+
+.cmd-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);}
+.cmd-stat{padding:16px 20px;border-right:1px solid var(--line);}
+.cmd-stat:last-child{border-right:0;}
+.cmd-stat-label{
+  font-family:var(--mono);font-size:9.5px;color:var(--text-mute);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;
+}
+.cmd-stat-val{font-family:var(--sans);font-size:22px;font-weight:600;color:var(--text);letter-spacing:-.02em;}
+.cmd-stat-val .u{font-size:12px;color:var(--text-mute);font-weight:400;margin-left:2px;}
+.cmd-stat-delta{font-family:var(--mono);font-size:10px;margin-top:4px;}
+.cmd-stat-delta.up{color:var(--green);}
+.cmd-stat-delta.down{color:var(--red);}
+
+/* MANIFESTO STRIP */
+.manifesto-strip{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:100px 32px;text-align:center;
+  position:relative;z-index:2;background:rgba(0,0,0,.25);
+}
+.manifesto-strip-tag{
+  font-family:var(--mono);font-size:11px;color:var(--cyan);
+  letter-spacing:2.5px;text-transform:uppercase;font-weight:500;margin-bottom:32px;
+}
+.manifesto-strip-text{
+  font-size:clamp(30px,4.4vw,60px);font-weight:400;
+  letter-spacing:-.028em;line-height:1.08;
+  color:var(--text);max-width:1150px;margin:0 auto;
+}
+.manifesto-strip-text .em{
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-style:italic;font-weight:400;
+}
+
+/* SECTIONS */
+.section{padding:140px 32px;position:relative;z-index:2;}
+.section-inner{max-width:1400px;margin:0 auto;}
+.section-head{margin-bottom:80px;max-width:900px;}
+.section-tag{
+  font-family:var(--mono);font-size:11px;color:var(--cyan);
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.section-tag::before{content:'';width:32px;height:1px;background:var(--cyan);box-shadow:0 0 8px var(--cyan);}
+.section-title{
+  font-size:clamp(36px,5.2vw,68px);font-weight:500;
+  letter-spacing:-.033em;line-height:1.04;color:var(--text);
+}
+.section-title .em{
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-style:italic;font-weight:400;
+}
+.section-lead{margin-top:24px;font-size:17px;line-height:1.55;color:var(--text-dim);max-width:680px;}
+
+.modules-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;
+}
+.module{
+  padding:24px 22px;background:var(--bg);min-height:150px;
+  display:flex;flex-direction:column;
+  transition:background .2s;position:relative;
+}
+.module:hover{background:rgba(0,209,255,.03);}
+.module-code{
+  font-family:var(--mono);font-size:9.5px;color:var(--text-mute);
+  letter-spacing:1.5px;margin-bottom:14px;font-weight:500;
+}
+.module-name{
+  font-size:16px;font-weight:600;color:var(--text);
+  letter-spacing:-.01em;margin-bottom:8px;
+}
+.module-desc{font-size:12.5px;color:var(--text-dim);line-height:1.5;}
+.module-dot{
+  position:absolute;top:22px;right:22px;
+  width:6px;height:6px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 6px var(--cyan);opacity:.6;
+}
+
+/* SCORE */
+.score-wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.score-viz{
+  border:1px solid var(--line-2);border-radius:16px;
+  background:linear-gradient(180deg,rgba(12,16,28,.5),rgba(7,10,20,.9));
+  padding:40px;position:relative;overflow:hidden;
+}
+.score-gauge{display:flex;flex-direction:column;align-items:center;padding:32px 0;}
+.score-gauge-svg{width:280px;height:280px;}
+.score-num{
+  position:absolute;top:calc(50% - 20px);left:50%;transform:translate(-50%,-50%);
+  font-size:76px;font-weight:300;letter-spacing:-.04em;color:var(--text);
+  font-family:var(--sans);
+}
+.score-max{font-size:16px;color:var(--text-mute);margin-left:6px;font-weight:400;}
+.score-label{
+  position:absolute;top:calc(50% + 46px);left:50%;transform:translate(-50%,-50%);
+  font-family:var(--mono);font-size:10px;color:var(--cyan);
+  letter-spacing:2px;text-transform:uppercase;font-weight:600;
+}
+.score-signals{
+  margin-top:40px;padding-top:24px;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px 20px;
+}
+.score-signal{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;color:var(--text-dim);
+}
+.score-signal::before{
+  content:'';width:5px;height:5px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 5px var(--cyan);flex-shrink:0;
+}
+
+.score-copy h3{
+  font-size:clamp(28px,3.4vw,44px);font-weight:500;
+  letter-spacing:-.025em;line-height:1.1;margin-bottom:20px;color:var(--text);
+}
+.score-copy h3 .em{
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-style:italic;font-weight:400;
+}
+.score-copy p{color:var(--text-dim);font-size:16px;line-height:1.6;margin-bottom:24px;}
+.score-copy ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.score-copy li{padding-left:22px;position:relative;font-size:14px;color:var(--text-2);}
+.score-copy li::before{content:'';position:absolute;left:0;top:9px;width:10px;height:1px;background:var(--cyan);}
+
+/* INTEGRATIONS */
+.integrations{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+}
+.int{
+  padding:28px 22px;background:var(--bg);
+  display:flex;align-items:center;gap:12px;transition:background .2s;
+}
+.int:hover{background:rgba(0,209,255,.03);}
+.int-icon{
+  width:32px;height:32px;border-radius:7px;
+  border:1px solid var(--line-2);background:rgba(0,209,255,.05);color:var(--cyan);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.int-name{font-family:var(--mono);font-size:12px;color:var(--text-2);font-weight:500;letter-spacing:.3px;}
+
+/* AI ENGINE */
+.ai-wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.ai-viz{
+  height:420px;position:relative;
+  border:1px solid var(--line-2);border-radius:16px;
+  background:
+    radial-gradient(ellipse 600px 400px at 50% 50%, rgba(0,209,255,.08), transparent 60%),
+    linear-gradient(180deg,rgba(12,16,28,.5),rgba(7,10,20,.9));
+  overflow:hidden;
+}
+.ai-node{
+  position:absolute;width:12px;height:12px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 12px var(--cyan);
+  transform:translate(-50%,-50%);
+}
+.ai-node.big{width:22px;height:22px;background:var(--blue);box-shadow:0 0 20px var(--blue);}
+.ai-node.center{
+  width:48px;height:48px;
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  box-shadow:0 0 40px rgba(0,209,255,.6);
+  border:2px solid rgba(255,255,255,.2);
+}
+.ai-center-label{
+  position:absolute;top:calc(50% + 42px);left:50%;transform:translate(-50%,-50%);
+  font-family:var(--mono);font-size:10px;color:var(--cyan);
+  letter-spacing:2px;text-transform:uppercase;font-weight:700;white-space:nowrap;
+}
+
+/* INDUSTRIES */
+.industries{display:flex;flex-wrap:wrap;gap:12px;}
+.industry{
+  padding:14px 22px;
+  border:1px solid var(--line-2);border-radius:99px;
+  font-family:var(--mono);font-size:12.5px;color:var(--text-2);
+  font-weight:500;letter-spacing:.3px;
+  background:rgba(0,209,255,.03);transition:all .2s;
+}
+.industry:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,209,255,.08);}
+.industry.now{
+  background:linear-gradient(135deg,rgba(0,209,255,.15),rgba(47,107,255,.08));
+  border-color:rgba(0,209,255,.4);color:var(--text);
+}
+.industry.now::before{
+  content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--green);margin-right:8px;
+  box-shadow:0 0 6px var(--green);vertical-align:middle;
+  animation:pulse 2s infinite;
+}
+
+/* BENEFITS */
+.benefits-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+}
+.benefit{
+  padding:36px 28px;background:var(--bg);
+  display:flex;flex-direction:column;gap:14px;transition:background .2s;
+}
+.benefit:hover{background:rgba(0,209,255,.03);}
+.benefit-num{
+  font-family:var(--mono);font-size:34px;font-weight:200;
+  color:var(--cyan);letter-spacing:-.03em;line-height:1;
+}
+.benefit-name{font-size:14.5px;font-weight:600;color:var(--text);letter-spacing:-.01em;}
+.benefit-desc{font-size:12.5px;color:var(--text-dim);line-height:1.5;}
+
+/* FLOW */
+.flow{
+  padding:60px;
+  border:1px solid var(--line-2);border-radius:16px;
+  background:linear-gradient(180deg,rgba(12,16,28,.5),rgba(7,10,20,.9));
+  overflow:hidden;
+}
+.flow-track{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:0;position:relative;overflow-x:auto;
+}
+.flow-node{
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  flex-shrink:0;padding:0 14px;
+}
+.flow-node-icon{
+  width:56px;height:56px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--line-2);
+  background:linear-gradient(180deg,rgba(0,209,255,.06),rgba(47,107,255,.02));
+  color:var(--cyan);
+}
+.flow-node-name{
+  font-family:var(--mono);font-size:10.5px;color:var(--text-2);
+  text-transform:uppercase;letter-spacing:1px;font-weight:600;text-align:center;
+}
+.flow-arrow{
+  flex:1;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);
+  position:relative;min-width:20px;
+}
+.flow-arrow::after{
+  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:0;height:0;
+  border-left:4px solid var(--cyan);
+  border-top:3px solid transparent;border-bottom:3px solid transparent;
+}
+.flow-node.final .flow-node-icon{
+  background:linear-gradient(135deg,var(--cyan),var(--blue));color:#fff;
+  box-shadow:0 0 24px rgba(0,209,255,.4);border-color:transparent;
+}
+.flow-node.final .flow-node-name{color:var(--cyan);}
+
+/* CTA */
+.cta{padding:160px 32px;text-align:center;position:relative;z-index:2;}
+.cta-inner{max-width:1000px;margin:0 auto;}
+.cta-eyebrow{
+  font-family:var(--mono);font-size:11px;color:var(--cyan);
+  letter-spacing:2.5px;text-transform:uppercase;font-weight:500;margin-bottom:32px;
+}
+.cta h2{
+  font-size:clamp(40px,6.4vw,88px);font-weight:400;
+  letter-spacing:-.045em;line-height:1;color:var(--text);
+  margin-bottom:32px;
+}
+.cta h2 .em{
+  background:linear-gradient(135deg,var(--cyan),var(--blue));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  font-style:italic;font-weight:400;
+}
+.cta p{font-size:17px;color:var(--text-dim);max-width:600px;margin:0 auto 48px;line-height:1.55;}
+.cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+/* FOOTER */
+.footer{
+  border-top:1px solid var(--line);padding:36px 32px;
+  position:relative;z-index:2;background:rgba(0,0,0,.35);
+}
+.footer-inner{
+  max-width:1400px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-brand{display:flex;flex-direction:column;gap:6px;}
+.footer-brand-line{font-family:var(--mono);font-size:12px;color:var(--text-2);font-weight:500;}
+.footer-brand-meta{font-family:var(--mono);font-size:11px;color:var(--text-mute);}
+.footer-status{
+  display:flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:11px;color:var(--text-mute);
+}
+.footer-status::before{
+  content:'';width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 6px var(--green);
+}
+
+@media (max-width:1200px){
+  .modules-grid{grid-template-columns:repeat(3,1fr);}
+  .integrations{grid-template-columns:repeat(3,1fr);}
+  .benefits-grid{grid-template-columns:repeat(2,1fr);}
+  .cmd-body{grid-template-columns:180px 1fr 220px;}
+}
+@media (max-width:1024px){.nav-links{display:none;}}
+@media (max-width:880px){
+  .hero{padding:120px 20px 40px;}
+  .cmd-body{grid-template-columns:1fr;}
+  .cmd-side,.cmd-feed{display:none;}
+  .cmd-stats{grid-template-columns:repeat(2,1fr);}
+  .modules-grid{grid-template-columns:repeat(2,1fr);}
+  .integrations{grid-template-columns:repeat(2,1fr);}
+  .benefits-grid{grid-template-columns:1fr;}
+  .score-wrap,.ai-wrap{grid-template-columns:1fr;gap:40px;}
+  .flow{padding:24px;}
+  .flow-track{flex-direction:column;gap:16px;}
+  .flow-arrow{width:1px;height:20px;background:linear-gradient(180deg,var(--cyan),transparent);}
+  .flow-arrow::after{right:auto;top:auto;bottom:0;left:50%;transform:translateX(-50%);
+    border-left:3px solid transparent;border-right:3px solid transparent;
+    border-top:4px solid var(--cyan);border-bottom:0;}
+  .footer-inner{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-grad"></div>
+<div class="bg-grid"></div>
+<div class="bg-noise"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
+        <path d="M3 18 L8 8 L12 14 L16 6 L21 18" stroke="#00d1ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 4 V8 M10 6 H14" stroke="#2f6bff" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="nav-brand-text">
+      <span class="nav-brand-name">BlueAid</span>
+      <span class="nav-brand-tag">SORH</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#plataforma">Plataforma</a>
+    <a href="#inteligencia">Inteligencia</a>
+    <a href="#industrias">Industrias</a>
+    <a href="#empresa">Empresa</a>
+  </div>
+  <a href="https://wa.me/56974537002?text=Hola,%20me%20gustar%C3%ADa%20solicitar%20una%20demo%20de%20BlueAid" target="_blank" rel="noopener noreferrer" class="nav-cta">
+    Agendar demo
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      <span>Inteligencia del riesgo humano en tiempo real</span>
+      <span class="hero-eyebrow-sep">·</span>
+      <span>Construido para operaciones de alto riesgo</span>
+    </div>
+
+    <h1>
+      <span class="light">El</span> <span class="em">sistema operativo</span><br>
+      del riesgo humano.
+    </h1>
+
+    <p class="hero-sub">
+      BlueAid es la capa de inteligencia que monitorea, predice y previene el riesgo humano en toda tu operación — <strong>antes</strong> de que se convierta en un incidente.
+    </p>
+
+    <div class="hero-cta">
+      <a href="https://wa.me/56974537002?text=Hola,%20me%20gustar%C3%ADa%20solicitar%20una%20demo%20de%20BlueAid" target="_blank" rel="noopener noreferrer" class="btn-primary">
+        Agendar demo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#plataforma" class="btn-ghost">Ver plataforma ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- COMMAND CENTER -->
+<section class="cmd">
+  <div class="cmd-inner">
+    <div class="cmd-frame">
+      <div class="cmd-topbar">
+        <div class="cmd-dots"><span></span><span></span><span></span></div>
+        <span class="cmd-title"><b>Centro de Comando BlueAid</b> · faena: sierra-gorda-01 · turno: noche</span>
+        <span class="cmd-live">en vivo</span>
+      </div>
+
+      <div class="cmd-body">
+        <div class="cmd-side">
+          <div class="cmd-side-label">Operaciones</div>
+          <div class="cmd-side-item active">
+            <svg class="cmd-side-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+            Mapa en vivo
+            <span class="cmd-side-count">12</span>
+          </div>
+          <div class="cmd-side-item">
+            <svg class="cmd-side-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
+            Trabajadores
+            <span class="cmd-side-count">14.2k</span>
+          </div>
+          <div class="cmd-side-item">
+            <svg class="cmd-side-icon" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 8l10 6 10-6-10-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Puntaje de riesgo
+            <span class="cmd-side-count">84</span>
+          </div>
+          <div class="cmd-side-item">
+            <svg class="cmd-side-icon" viewBox="0 0 24 24" fill="none"><path d="M12 8v4M12 16h.01M12 3l9 17H3L12 3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Alertas
+            <span class="cmd-side-count alert">3</span>
+          </div>
+
+          <div class="cmd-side-label" style="margin-top:14px;">Inteligencia</div>
+          <div class="cmd-side-item">
+            <svg class="cmd-side-icon" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l2-7 4 14 2-7h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Fatiga
+          </div>
+          <div class="cmd-side-item">
+            <svg class="cmd-side-icon" viewBox="0 0 24 24" fill="none"><path d="M20 12a8 8 0 11-16 0 8 8 0 0116 0zM12 4v8l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Wearables
+          </div>
+          <div class="cmd-side-item">
+            <svg class="cmd-side-icon" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-12V4l-8-2-8 2v6c0 8 8 12 8 12z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Cumplimiento
+          </div>
+          <div class="cmd-side-item">
+            <svg class="cmd-side-icon" viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18M7 14l4-4 3 3 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Reportes
+          </div>
+        </div>
+
+        <div class="cmd-main">
+          <div class="cmd-main-head">
+            <div>
+              <div class="cmd-main-title">Mapa de Operaciones en Vivo</div>
+              <div class="cmd-main-sub">14,217 trabajadores monitoreados · 12 faenas · zona: LATAM</div>
+            </div>
+            <div class="cmd-main-tabs">
+              <div class="cmd-tab active">Mapa</div>
+              <div class="cmd-tab">Calor</div>
+              <div class="cmd-tab">Grilla</div>
+            </div>
+          </div>
+          <div class="cmd-map">
+            <div class="cmd-map-grid"></div>
+            <div class="cmd-dot ok" style="top:20%;left:15%;"></div>
+            <div class="cmd-dot ok" style="top:28%;left:22%;"></div>
+            <div class="cmd-dot ok" style="top:35%;left:12%;"></div>
+            <div class="cmd-dot warn" style="top:42%;left:28%;"></div>
+            <div class="cmd-dot ok" style="top:50%;left:20%;"></div>
+            <div class="cmd-dot ok" style="top:22%;left:34%;"></div>
+            <div class="cmd-dot ok" style="top:32%;left:42%;"></div>
+            <div class="cmd-dot warn" style="top:40%;left:48%;"></div>
+            <div class="cmd-dot ok" style="top:48%;left:38%;"></div>
+            <div class="cmd-dot ok" style="top:55%;left:44%;"></div>
+            <div class="cmd-dot ok" style="top:60%;left:32%;"></div>
+            <div class="cmd-dot ok" style="top:68%;left:24%;"></div>
+            <div class="cmd-dot alert" style="top:38%;left:62%;"></div>
+            <div class="cmd-ring" style="top:38%;left:62%;"></div>
+            <div class="cmd-dot ok" style="top:45%;left:70%;"></div>
+            <div class="cmd-dot ok" style="top:52%;left:58%;"></div>
+            <div class="cmd-dot ok" style="top:60%;left:66%;"></div>
+            <div class="cmd-dot warn" style="top:65%;left:74%;"></div>
+            <div class="cmd-dot ok" style="top:72%;left:60%;"></div>
+            <div class="cmd-dot ok" style="top:30%;left:78%;"></div>
+            <div class="cmd-dot ok" style="top:38%;left:86%;"></div>
+            <div class="cmd-dot alert" style="top:52%;left:82%;"></div>
+            <div class="cmd-ring" style="top:52%;left:82%;"></div>
+            <div class="cmd-dot ok" style="top:62%;left:88%;"></div>
+            <div class="cmd-dot ok" style="top:75%;left:84%;"></div>
+            <div class="cmd-dot ok" style="top:80%;left:50%;"></div>
+            <div class="cmd-dot ok" style="top:82%;left:38%;"></div>
+            <div class="cmd-dot alert" style="top:76%;left:16%;"></div>
+            <div class="cmd-ring" style="top:76%;left:16%;"></div>
+          </div>
+        </div>
+
+        <div class="cmd-feed">
+          <div class="cmd-feed-label">Feed de riesgo · en vivo</div>
+
+          <div class="cmd-feed-item hot">
+            <div class="cmd-feed-head">
+              <span class="cmd-feed-tag alert">Crítico</span>
+              <span class="cmd-feed-time">02:14</span>
+            </div>
+            <div class="cmd-feed-text"><span class="h">Somnolencia detectada</span> · operador CAEX-47</div>
+            <div class="cmd-feed-meta">Sierra Gorda · zona A-3</div>
+          </div>
+
+          <div class="cmd-feed-item">
+            <div class="cmd-feed-head">
+              <span class="cmd-feed-tag warn">Alerta</span>
+              <span class="cmd-feed-time">02:12</span>
+            </div>
+            <div class="cmd-feed-text"><span class="h">Puntaje de fatiga elevado</span> · 3 trabajadores</div>
+            <div class="cmd-feed-meta">turno &gt; 9h · zona C</div>
+          </div>
+
+          <div class="cmd-feed-item">
+            <div class="cmd-feed-head">
+              <span class="cmd-feed-tag warn">Alerta</span>
+              <span class="cmd-feed-time">02:08</span>
+            </div>
+            <div class="cmd-feed-text"><span class="h">23 exámenes por vencer</span> · &lt;7 días</div>
+            <div class="cmd-feed-meta">centro costo SGSC-NOC</div>
+          </div>
+
+          <div class="cmd-feed-item">
+            <div class="cmd-feed-head">
+              <span class="cmd-feed-tag ok">Resuelto</span>
+              <span class="cmd-feed-time">02:03</span>
+            </div>
+            <div class="cmd-feed-text"><span class="h">Pausa activa completada</span></div>
+            <div class="cmd-feed-meta">CAEX-22 · vuelve al turno</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmd-stats">
+        <div class="cmd-stat">
+          <div class="cmd-stat-label">Trabajadores monitoreados</div>
+          <div class="cmd-stat-val">14,217</div>
+          <div class="cmd-stat-delta up">↑ 2.4% vs semana anterior</div>
+        </div>
+        <div class="cmd-stat">
+          <div class="cmd-stat-label">Puntaje de riesgo humano</div>
+          <div class="cmd-stat-val">84<span class="u">/100</span></div>
+          <div class="cmd-stat-delta up">↑ 6 pts · tendencia positiva</div>
+        </div>
+        <div class="cmd-stat">
+          <div class="cmd-stat-label">Alertas activas</div>
+          <div class="cmd-stat-val">3</div>
+          <div class="cmd-stat-delta down">↓ 38% post-intervención</div>
+        </div>
+        <div class="cmd-stat">
+          <div class="cmd-stat-label">Incidentes prevenidos</div>
+          <div class="cmd-stat-val">127<span class="u"> · YTD</span></div>
+          <div class="cmd-stat-delta up">est. USD 4.2M ahorrados</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO STRIP -->
+<section class="manifesto-strip">
+  <div class="manifesto-strip-tag">// Categoría</div>
+  <div class="manifesto-strip-text">
+    Estamos construyendo el <span class="em">sistema operativo del riesgo humano</span> para los trabajos más peligrosos del mundo.
+  </div>
+</section>
+
+<!-- PLATAFORMA -->
+<section class="section" id="plataforma">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-tag">La plataforma</div>
+      <h2 class="section-title">
+        Un sistema. <span class="em">Cada señal humana.</span>
+      </h2>
+      <p class="section-lead">
+        BlueAid unifica salud, seguridad, fatiga, salud mental, wearables y datos clínicos en una sola capa de inteligencia. Diseñada para operaciones que no pueden permitirse sorpresas.
+      </p>
+    </div>
+
+    <div class="modules-grid">
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">01 · IS</div>
+        <div class="module-name">Inteligencia de Salud</div>
+        <div class="module-desc">Agregación de señales de salud ocupacional en tiempo real.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">02 · IF</div>
+        <div class="module-name">Inteligencia de Fatiga</div>
+        <div class="module-desc">Detección continua de fatiga y somnolencia.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">03 · OM</div>
+        <div class="module-name">Operaciones Médicas</div>
+        <div class="module-desc">Agendamiento automático de exámenes y flujos clínicos.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">04 · IA</div>
+        <div class="module-name">Motor de Riesgo con IA</div>
+        <div class="module-desc">Modelos predictivos de exposición al riesgo humano.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">05 · SM</div>
+        <div class="module-name">Salud Mental</div>
+        <div class="module-desc">Detección y respuesta a riesgo psicosocial.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">06 · RH</div>
+        <div class="module-name">Rendimiento Humano</div>
+        <div class="module-desc">Carga cognitiva y aptitud para el turno.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">07 · WR</div>
+        <div class="module-name">Wearables</div>
+        <div class="module-desc">Ingesta de vitales desde cualquier dispositivo — o ninguno.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">08 · AP</div>
+        <div class="module-name">Analítica Predictiva</div>
+        <div class="module-desc">Pronostica el riesgo antes de que se materialice.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">09 · RE</div>
+        <div class="module-name">Respuesta a Emergencias</div>
+        <div class="module-desc">Acción coordinada entre operaciones y equipo médico.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">10 · SC</div>
+        <div class="module-name">Salud de Contratistas</div>
+        <div class="module-desc">Visibilidad total de tu fuerza laboral extendida.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">11 · RC</div>
+        <div class="module-name">Red Clínica</div>
+        <div class="module-desc">Integrada con clínicas, mutuales y médicos especialistas.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">12 · CU</div>
+        <div class="module-name">Cumplimiento</div>
+        <div class="module-desc">Reportes auditables para SUSESO, mutual y dirección.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">13 · EI</div>
+        <div class="module-name">Exámenes Inteligentes</div>
+        <div class="module-desc">Automatización de extremo a extremo de exámenes ocupacionales.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">14 · DI</div>
+        <div class="module-name">Dashboard Industrial</div>
+        <div class="module-desc">Inteligencia operacional a nivel de faena.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">15 · CC</div>
+        <div class="module-name">Centro de Comando Ejecutivo</div>
+        <div class="module-desc">Riesgo humano de todo el portafolio en un solo panel.</div>
+      </div>
+      <div class="module"><div class="module-dot"></div>
+        <div class="module-code">16 · II</div>
+        <div class="module-name">Inteligencia de Incidentes</div>
+        <div class="module-desc">Aprende de cada evento. No se repite.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HUMAN RISK SCORE -->
+<section class="section" id="inteligencia" style="padding-top:60px;">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-tag">Puntaje de riesgo humano</div>
+      <h2 class="section-title">
+        Un solo número. <span class="em">Cientos de variables.</span>
+      </h2>
+    </div>
+
+    <div class="score-wrap">
+      <div class="score-viz">
+        <div class="score-gauge" style="position:relative;">
+          <svg class="score-gauge-svg" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="86" stroke="rgba(255,255,255,0.06)" stroke-width="10" fill="none"/>
+            <circle cx="100" cy="100" r="86" stroke="url(#scoreGrad)" stroke-width="10" fill="none"
+              stroke-linecap="round" stroke-dasharray="540"
+              stroke-dashoffset="86" transform="rotate(-90 100 100)"/>
+            <defs>
+              <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00d1ff"/>
+                <stop offset="100%" stop-color="#2f6bff"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="score-num">84<span class="score-max">/100</span></div>
+          <div class="score-label">Puntaje · en vivo</div>
+        </div>
+
+        <div class="score-signals">
+          <div class="score-signal">Historial médico</div>
+          <div class="score-signal">Fatiga y sueño</div>
+          <div class="score-signal">Vitales · wearables</div>
+          <div class="score-signal">Estrés</div>
+          <div class="score-signal">Historial de turnos</div>
+          <div class="score-signal">Datos ambientales</div>
+          <div class="score-signal">Señales psicológicas</div>
+          <div class="score-signal">Evaluaciones clínicas</div>
+          <div class="score-signal">Observaciones de seguridad</div>
+          <div class="score-signal">Contexto operacional</div>
+        </div>
+      </div>
+
+      <div class="score-copy">
+        <h3>
+          No es una foto. <br>Es una <span class="em">señal continua.</span>
+        </h3>
+        <p>
+          El puntaje de riesgo humano se genera en tiempo real combinando cientos de variables fisiológicas, médicas, ambientales y operacionales mediante nuestro motor de IA.
+        </p>
+        <ul>
+          <li>Se actualiza cada turno · cada evento · cada minuto</li>
+          <li>Explicable — cada puntaje se descompone en sus drivers</li>
+          <li>Accionable — dispara flujos, no solo dashboards</li>
+          <li>Auditable — linaje de datos completo para cumplimiento</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-tag">Una plataforma · cada señal</div>
+      <h2 class="section-title">
+        Conectada a <span class="em">cada fuente de verdad.</span>
+      </h2>
+      <p class="section-lead">
+        BlueAid integra con los sistemas que ya operas — clínicas, wearables, IoT, ERP, RRHH, seguridad y remuneraciones — y los convierte en inteligencia.
+      </p>
+    </div>
+
+    <div class="integrations">
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4 12H2M22 12h-2M5.6 5.6L4 4M20 20l-1.6-1.6M18.4 5.6L20 4M4 20l1.6-1.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/></svg></div><div class="int-name">Clínicas</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M8 2h8v3H8zM4 5h16v4H4zM6 9v11a1 1 0 001 1h10a1 1 0 001-1V9M10 13h4M12 11v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="int-name">Centros Médicos</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 9l2-6h14l2 6M3 9v10a1 1 0 001 1h16a1 1 0 001-1V9M3 9h18M10 15h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="int-name">Ambulancias</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="5" y="2" width="14" height="20" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M10 6h4M12 18h.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="int-name">Wearables</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.6"/></svg></div><div class="int-name">IoT · Sensores</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M8 4v16" stroke="currentColor" stroke-width="1.6"/></svg></div><div class="int-name">ERP</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.6"/><path d="M2 21c0-3.9 3.1-7 7-7s7 3.1 7 7M17 11l2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="int-name">RRHH</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-12V4l-8-2-8 2v6c0 8 8 12 8 12z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><div class="int-name">Seguridad</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 10h18M7 2v4M17 2v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="int-name">Remuneraciones</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C7 2 4 6 4 10v4l-2 3h20l-2-3v-4c0-4-3-8-8-8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 20a2 2 0 004 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="int-name">Biométricos</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><div class="int-name">Dispositivos de sueño</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 3v6l-6 12h18L15 9V3M8 3h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="int-name">Laboratorios</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8h8v8H8zM12 12v.01" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="int-name">Exámenes ocupacionales</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 22v-4M2 12h4M22 12h-4M6 6l3 3M15 15l3 3M6 18l3-3M15 9l3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="int-name">APIs externas</div></div>
+      <div class="int"><div class="int-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M12 1v6M12 17v6M4.2 4.2l4.3 4.3M15.5 15.5l4.3 4.3M1 12h6M17 12h6M4.2 19.8l4.3-4.3M15.5 8.5l4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div><div class="int-name">Ambientales</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AI ENGINE -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-tag">Motor de Inteligencia Artificial</div>
+      <h2 class="section-title">
+        Patrones que los humanos no ven. <br><span class="em">Riesgos sobre los que sí pueden actuar.</span>
+      </h2>
+    </div>
+
+    <div class="ai-wrap">
+      <div class="ai-viz">
+        <div class="ai-node" style="top:15%;left:15%;"></div>
+        <div class="ai-node" style="top:20%;left:35%;"></div>
+        <div class="ai-node big" style="top:12%;left:55%;"></div>
+        <div class="ai-node" style="top:22%;left:78%;"></div>
+        <div class="ai-node" style="top:38%;left:8%;"></div>
+        <div class="ai-node big" style="top:42%;left:85%;"></div>
+        <div class="ai-node" style="top:55%;left:12%;"></div>
+        <div class="ai-node" style="top:60%;left:32%;"></div>
+        <div class="ai-node" style="top:65%;left:65%;"></div>
+        <div class="ai-node" style="top:58%;left:80%;"></div>
+        <div class="ai-node big" style="top:82%;left:22%;"></div>
+        <div class="ai-node" style="top:88%;left:50%;"></div>
+        <div class="ai-node" style="top:80%;left:75%;"></div>
+        <div class="ai-node center" style="top:50%;left:50%;"></div>
+        <div class="ai-center-label">Motor de Riesgo</div>
+
+        <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;">
+          <defs>
+            <linearGradient id="l1" x1="0" x2="1"><stop offset="0" stop-color="#00d1ff" stop-opacity=".5"/><stop offset="1" stop-color="#00d1ff" stop-opacity="0"/></linearGradient>
+          </defs>
+          <g stroke="url(#l1)" stroke-width="1" fill="none">
+            <line x1="50%" y1="50%" x2="15%" y2="15%"/>
+            <line x1="50%" y1="50%" x2="35%" y2="20%"/>
+            <line x1="50%" y1="50%" x2="55%" y2="12%"/>
+            <line x1="50%" y1="50%" x2="78%" y2="22%"/>
+            <line x1="50%" y1="50%" x2="8%" y2="38%"/>
+            <line x1="50%" y1="50%" x2="85%" y2="42%"/>
+            <line x1="50%" y1="50%" x2="12%" y2="55%"/>
+            <line x1="50%" y1="50%" x2="32%" y2="60%"/>
+            <line x1="50%" y1="50%" x2="65%" y2="65%"/>
+            <line x1="50%" y1="50%" x2="80%" y2="58%"/>
+            <line x1="50%" y1="50%" x2="22%" y2="82%"/>
+            <line x1="50%" y1="50%" x2="50%" y2="88%"/>
+            <line x1="50%" y1="50%" x2="75%" y2="80%"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="score-copy">
+        <h3>Tu sistema de <span class="em">alerta temprana</span> para el riesgo humano.</h3>
+        <p>
+          Nuestros modelos de IA aprenden continuamente de cada trabajador, cada turno y cada incidente de la plataforma — anticipando riesgos días antes de que se conviertan en lesiones.
+        </p>
+        <ul>
+          <li>Detecta fatiga, estrés y patrones cognitivos invisibles para humanos</li>
+          <li>Predice exposición al riesgo a nivel de trabajador y de faena</li>
+          <li>Prioriza y enruta intervenciones al equipo correcto</li>
+          <li>Aprende continuamente — el motor mejora en cada turno</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section class="section" id="industrias">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-tag">Construido para operaciones de alto riesgo</div>
+      <h2 class="section-title">
+        Donde <span class="em">cada decisión humana</span> importa.
+      </h2>
+    </div>
+
+    <div class="industries">
+      <div class="industry now">Minería</div>
+      <div class="industry now">Petróleo y Gas</div>
+      <div class="industry now">Construcción</div>
+      <div class="industry">Energía</div>
+      <div class="industry">Manufactura</div>
+      <div class="industry">Puertos</div>
+      <div class="industry">Transporte</div>
+      <div class="industry">Logística</div>
+      <div class="industry">Aviación</div>
+      <div class="industry">Marítimo</div>
+      <div class="industry">Utilities</div>
+      <div class="industry">Químicos</div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-tag">Resultados</div>
+      <h2 class="section-title">
+        Lo que los operadores <span class="em">realmente obtienen.</span>
+      </h2>
+    </div>
+
+    <div class="benefits-grid">
+      <div class="benefit">
+        <div class="benefit-num">01</div>
+        <div class="benefit-name">Prevención de incidentes</div>
+        <div class="benefit-desc">Detecta el riesgo humano antes de que se convierta en lesión o fatalidad.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-num">02</div>
+        <div class="benefit-name">Menos tiempo muerto</div>
+        <div class="benefit-desc">Menos detenciones no planificadas. Recuperación más rápida. Mayor disponibilidad.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-num">03</div>
+        <div class="benefit-name">Trabajadores aptos</div>
+        <div class="benefit-desc">Cada trabajador apto para el turno. Cada día. Auditable y en tiempo real.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-num">04</div>
+        <div class="benefit-name">Mayor productividad</div>
+        <div class="benefit-desc">La persona correcta, en la tarea correcta, en las condiciones correctas.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-num">05</div>
+        <div class="benefit-name">Menor costo médico</div>
+        <div class="benefit-desc">Operación clínica consolidada. Sin exámenes duplicados. Sin visitas redundantes.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-num">06</div>
+        <div class="benefit-name">Operación centralizada</div>
+        <div class="benefit-desc">Un solo sistema reemplaza planillas, cadenas de correo y herramientas desconectadas.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-num">07</div>
+        <div class="benefit-name">Visibilidad en tiempo real</div>
+        <div class="benefit-desc">Del turno al directorio · de faena a portafolio · en una sola vista.</div>
+      </div>
+      <div class="benefit">
+        <div class="benefit-num">08</div>
+        <div class="benefit-name">Soporte al ejecutivo</div>
+        <div class="benefit-desc">El riesgo humano se vuelve un KPI predictivo, no reactivo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <div class="section-tag">El flujo</div>
+      <h2 class="section-title">
+        Del <span class="em">trabajador</span> a la <span class="em">prevención del incidente.</span>
+      </h2>
+    </div>
+
+    <div class="flow">
+      <div class="flow-track">
+        <div class="flow-node">
+          <div class="flow-node-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <div class="flow-node-name">Trabajador</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M10 6h4M12 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <div class="flow-node-name">Wearables</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3-8 4 16 3-8h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="flow-node-name">Datos Médicos</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v18M3 12h18M6 6l12 12M6 18l12-12" stroke="currentColor" stroke-width="1" opacity=".5"/></svg></div>
+          <div class="flow-node-name">Motor de IA</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 8l10 6 10-6-10-6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+          <div class="flow-node-name">Puntaje de Riesgo</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node">
+          <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 7L9 18l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="flow-node-name">Acciones</div>
+        </div>
+        <div class="flow-arrow"></div>
+        <div class="flow-node final">
+          <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-12V4l-8-2-8 2v6c0 8 8 12 8 12z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="flow-node-name">Incidente Prevenido</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="demo">
+  <div class="cta-inner">
+    <div class="cta-eyebrow">¿Listo para la inteligencia del riesgo humano?</div>
+    <h2>
+      Conoce el riesgo humano<br>
+      <span class="em">antes</span> de que sea un incidente.
+    </h2>
+    <p>
+      30 minutos con tu equipo de operaciones. Sin diapositivas — solo la plataforma corriendo en una faena real.
+    </p>
+    <div class="cta-buttons">
+      <a href="https://wa.me/56974537002?text=Hola,%20me%20gustar%C3%ADa%20solicitar%20una%20demo%20de%20BlueAid" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding:18px 32px;font-size:15px;">
+        Agendar demo
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="mailto:rafael@blueaid.ai?subject=BlueAid — Reservar piloto" class="btn-ghost" style="padding:18px 26px;font-size:15px;">Reservar piloto</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-line">BlueAid · Sistema Operativo del Riesgo Humano</div>
+      <div class="footer-brand-meta">© 2026 BlueAid SpA · Santiago, Chile · rafael@blueaid.ai</div>
+    </div>
+    <div class="footer-status">blueaid-sorh · v6.0 · todos los sistemas operativos</div>
+  </div>
+</footer>
+
+</body>
+</html>
