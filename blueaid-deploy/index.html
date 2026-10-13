@@ -596,6 +596,19 @@ button{font-family:inherit;cursor:pointer;}
   display:flex;justify-content:space-between;align-items:center;
   flex-wrap:wrap;gap:16px;
 }
+.footer-partners{
+  max-width:1400px;margin:0 auto 32px;padding-bottom:32px;
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:28px 64px;
+}
+.footer-partners-label{
+  font-family:var(--mono);font-size:12px;font-weight:600;
+  color:var(--text-dim);letter-spacing:3px;text-transform:uppercase;
+}
+.footer-partners-logos{display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:28px 64px;}
+.footer-partners-logos img{height:40px;width:auto;opacity:.85;transition:opacity .2s;}
+.footer-partners-logos img:hover{opacity:1;}
 .footer-brand{display:flex;flex-direction:column;gap:6px;}
 .footer-brand-line{font-family:var(--mono);font-size:12px;color:var(--text-2);font-weight:500;}
 .footer-brand-meta{font-family:var(--mono);font-size:11px;color:var(--text-mute);}
@@ -1283,6 +1296,13 @@ button{font-family:inherit;cursor:pointer;}
 
 <!-- FOOTER -->
 <footer class="footer">
+  <div class="footer-partners">
+    <div class="footer-partners-label">Acelerado por</div>
+    <div class="footer-partners-logos">
+      <img src="/assets/udd-ventures.png" alt="Proyecto patrocinado por UDD Ventures" width="223" height="60" loading="lazy">
+      <img src="/assets/corfo.png" alt="CORFO" width="209" height="64" loading="lazy">
+    </div>
+  </div>
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-brand-line">BlueAid · Sistema Operativo del Riesgo Humano</div>
