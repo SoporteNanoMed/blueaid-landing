@@ -1,6 +1,6 @@
-# BlueAid Landing · v6
+# BlueAid Landing · v7
 
-Landing page en español — Sistema Operativo del Riesgo Humano (SORH)
+Landing page en español — Human Risk Intelligence para la minería (diseño del 21-oct-2026)
 
 ## Estructura del proyecto
 
@@ -11,7 +11,8 @@ blueaid-deploy/                        ← raíz del repositorio git
 │       └── azure-static-web-apps.yml  ← CI/CD automático
 ├── .gitignore
 └── blueaid-deploy/                    ← contenido del sitio (app_location)
-    ├── index.html                     ← landing completa (autocontenida, ~60KB)
+    ├── index.html                     ← landing completa (HTML + CSS, sin JavaScript por la CSP)
+    ├── assets/                        ← imágenes WebP, logos, ícono e imagen para redes (og.jpg)
     ├── staticwebapp.config.json       ← config Azure SWA (headers, rutas, caché)
     ├── robots.txt
     ├── sitemap.xml
